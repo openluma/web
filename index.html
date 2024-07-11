@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>openluma - Webdesign, Marketing & AI-Beratung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00B894;
+            --accent: #FF7675;
+            --bg: #2D3436;
+            --text: #DFE6E9;
+            --card-bg: #34495E;
+        }
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+        }
+        .container {
+            width: 90%;
+            max-width: 1400px; /* Increased for larger screens */
+            margin: 0 auto;
+        }
+        header {
+            background-color: rgba(45, 52, 54, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 2rem; /* Increased for larger screens */
+            font-weight: 700;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {transform: scale(1.1);}
+        .nav-links {display: flex; list-style: none;}
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            font-size: 1.1rem; /* Increased for larger screens */
+        }
+        .nav-links a:hover {background-color: var(--primary); color: var(--bg);}
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 150px 0 100px; /* Increased padding for larger screens */
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '🚀';
+            position: absolute;
+            font-size: 20rem; /* Increased for larger screens */
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% {transform: translateY(0px);}
+            50% {transform: translateY(-20px);}
+            100% {transform: translateY(0px);}
+        }
+        .hero-content {text-align: center; position: relative; z-index: 1;}
+        h1 {
+            font-size: 3.5rem; /* Increased for larger screens */
+            margin-bottom: 1.5rem; /* Increased for larger screens */
+        }
+        .hero p {
+            font-size: 1.5rem; /* Increased for larger screens */
+            max-width: 800px; /* Increased for larger screens */
+            margin: 0 auto 2.5rem; /* Increased bottom margin */
+        }
+        .cta-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 1rem 2rem; /* Increased padding */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 1.2rem; /* Increased font size */
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .services {padding: 6rem 0;} /* Increased padding */
+        .services h2 {
+            text-align: center;
+            margin-bottom: 3rem; /* Increased margin */
+            color: var(--primary);
+            font-size: 2.5rem; /* Increased font size */
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Increased minimum width */
+            gap: 2.5rem; /* Increased gap */
+        }
+        .service-item {
+            background: var(--card-bg);
+            padding: 2.5rem; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        .service-item:hover {transform: translateY(-5px);}
+        .service-item i {
+            font-size: 4rem; /* Increased icon size */
+            color: var(--secondary);
+            margin-bottom: 1.5rem; /* Increased margin */
+        }
+        .service-item h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem; /* Increased font size */
+        }
+        .service-item p {
+            font-size: 1.1rem; /* Increased font size */
+        }
+        footer {
+            background: var(--card-bg);
+            color: var(--text);
+            text-align: center;
+            padding: 1.5rem 0; /* Increased padding */
+            font-size: 1.1rem; /* Increased font size */
+        }
+        @media (max-width: 768px) {
+            .nav-links {display: none;}
+            h1 {font-size: 2rem;}
+            .hero p {font-size: 1rem;}
+            .services h2 {font-size: 2rem;}
+            .service-item h3 {font-size: 1.5rem;}
+            .service-item p {font-size: 1rem;}
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+        }
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">openluma</div>
+            <ul class="nav-links">
+                <li><a href="#home">🏠 Home</a></li>
+                <li><a href="#services">🛠️ Services</a></li>
+                <li><a href="#contact">📞 Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content container">
+                <h1>Webdesign, Marketing & AI-Beratung 🚀</h1>
+                <p>Wir kombinieren kreatives Design mit innovativer Technologie, um Ihre digitale Präsenz und Geschäftsprozesse zu revolutionieren. 💡🌐</p>
+                <a href="mailto:info@openluma.de?subject=Projektanfrage&body=Ich%20interessiere%20mich%20für%20Ihre%20Dienstleistungen." class="cta-btn">Projekt starten 🚀</a>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2>Unsere Dienstleistungen 🛠️</h2>
+                <div class="service-grid">
+                    <div class="service-item">
+                        <i class="fas fa-paint-brush"></i>
+                        <h3>Logo-Erstellung 🎨</h3>
+                        <p>Einzigartige visuelle Identitäten, die Ihre Marke zum Leben erwecken</p>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Website-Erstellung 💻</h3>
+                        <p>Responsive und benutzerfreundliche Websites, die begeistern</p>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Marketing-Beratung 📈</h3>
+                        <p>Datengetriebene Strategien für maximales Wachstum</p>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI-Beratung für Unternehmen 🤖</h3>
+                        <p>Implementierung innovativer AI-Tools zur Optimierung Ihrer Geschäftsprozesse</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Gestaltet mit ❤️ und Innovation von openluma | 
+            <a href="#" onclick="openPopup('datenschutz')">Datenschutz</a> | 
+            <a href="#" onclick="openPopup('impressum')">Impressum</a>
+        </p>
+    </footer>
+
+        <!-- Popup für Datenschutz -->
+    <div id="datenschutz-popup" class="popup-overlay">
+            <div class="popup-content">
+                <span class="popup-close" onclick="closePopup('datenschutz')">&times;</span>
+                <h2>Datenschutzerklärung</h2>
+                <p>Hier steht der vollständige Text der Datenschutzerklärung...</p>
+                <!-- Fügen Sie hier den vollständigen Datenschutztext ein -->
+        </div>
+     </div>
+    
+        <!-- Popup für Impressum -->
+    <div id="impressum-popup" class="popup-overlay">
+            <div class="popup-content">
+                <span class="popup-close" onclick="closePopup('impressum')">&times;</span>
+                <h2>Impressum</h2>
+                <p>Angaben gemäß § 5 TMG
+
+                    Luca Kuebler
+                    Blumenstraße 15
+                    74357 Boennigheim
+                    Vertreten durch:
+                    Luca Kuebler
+                    Kontakt:
+                    Telefon: 0159-01795353
+                    E-Mail: info@openluma.de
+                    
+                    Haftungsausschluss:
+                    
+                    Urheberrecht
+                    
+                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
+                    
+                    Datenschutz
+                    
+                    Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
+                    Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
+                    Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
+                    
+                    
+                    Google Analytics
+                    
+                    Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Inc. (''Google''). Google Analytics verwendet sog. ''Cookies'', Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website (einschließlich Ihrer IP-Adresse) wird an einen Server von Google in den USA übertragen und dort gespeichert. Google wird diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten für die Websitebetreiber zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen zu erbringen. Auch wird Google diese Informationen gegebenenfalls an Dritte übertragen, sofern dies gesetzlich vorgeschrieben oder soweit Dritte diese Daten im Auftrag von Google verarbeiten. Google wird in keinem Fall Ihre IP-Adresse mit anderen Daten der Google in Verbindung bringen. Sie können die Installation der Cookies durch eine entsprechende Einstellung Ihrer Browser Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website voll umfänglich nutzen können. Durch die Nutzung dieser Website erklären Sie sich mit der Bearbeitung der über Sie erhobenen Daten durch Google in der zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck einverstanden.
+                    
+                    
+                    Impressum vom Impressum Generator der Kanzlei Hasselbach, Fachanwälte für Familienrecht</p>
+                <!-- Fügen Sie hier den vollständigen Impressumstext ein -->
+        </div>
+     </div>
+
+    <script>
+        // Animate header on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.backgroundColor = window.scrollY > 50 ? 'rgba(45, 52, 54, 0.95)' : 'rgba(45, 52, 54, 0.8)';
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple animation for service items
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {threshold: 0.1});
+
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.style.opacity = 0;
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(item);
+        });
+        function openPopup(popupId) {
+            document.getElementById(popupId + '-popup').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Verhindert Scrollen der Hauptseite
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId + '-popup').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Erlaubt wieder Scrollen der Hauptseite
+        }
+
+        // Schließen des Popups beim Klicken außerhalb des Inhalts
+        window.onclick = function(event) {
+            if (event.target.className === 'popup-overlay') {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
